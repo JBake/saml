@@ -78,6 +78,53 @@ func DefaultRequestTracker(opts Options, serviceProvider *saml.ServiceProvider) 
 	}
 }
 
+// todo: move this up by the other options
+
+type ManualOptions struct {
+	EntityID string
+	// URL               url.URL
+	Key               *rsa.PrivateKey
+	Certificate       *x509.Certificate
+	Intermediates     []*x509.Certificate
+	AllowIDPInitiated bool
+	IDPMetadata       *saml.EntityDescriptor
+	SignRequest       bool
+	ForceAuthn        bool // TODO(ross): this should be *bool
+	// CookieSameSite    http.SameSite
+	// RelayStateFunc    func(w http.ResponseWriter, r *http.Request) string
+	MetadataURL url.URL
+	AcsURL      url.URL
+	SloURL      url.URL
+}
+
+// ManagedServiceProvider returns a saml.ServiceProvider managed outside of middleware
+func ManagedServiceProvider(opts ManualOptions) saml.ServiceProvider {
+	metadataURL := opts.MetadataURL
+	acsURL := opts.AcsURL
+	sloURL := opts.SloURL
+
+	var forceAuthn *bool
+	if opts.ForceAuthn {
+		forceAuthn = &opts.ForceAuthn
+	}
+	signatureMethod := dsig.RSASHA1SignatureMethod
+	if !opts.SignRequest {
+		signatureMethod = ""
+	}
+
+	return saml.ServiceProvider{
+		EntityID:        opts.EntityID,
+		Key:             opts.Key,
+		Certificate:     opts.Certificate,
+		Intermediates:   opts.Intermediates,
+		MetadataURL:     metadataURL,
+		AcsURL:          acsURL,
+		SloURL:          sloURL,
+		ForceAuthn:      forceAuthn,
+		SignatureMethod: signatureMethod,
+	}
+}
+
 // DefaultServiceProvider returns the default saml.ServiceProvider for the provided
 // options.
 func DefaultServiceProvider(opts Options) saml.ServiceProvider {
