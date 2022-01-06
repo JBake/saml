@@ -81,8 +81,7 @@ func DefaultRequestTracker(opts Options, serviceProvider *saml.ServiceProvider) 
 // todo: move this up by the other options
 
 type ManualOptions struct {
-	EntityID string
-	// URL               url.URL
+	EntityID          string
 	Key               *rsa.PrivateKey
 	Certificate       *x509.Certificate
 	Intermediates     []*x509.Certificate
@@ -90,11 +89,9 @@ type ManualOptions struct {
 	IDPMetadata       *saml.EntityDescriptor
 	SignRequest       bool
 	ForceAuthn        bool // TODO(ross): this should be *bool
-	// CookieSameSite    http.SameSite
-	// RelayStateFunc    func(w http.ResponseWriter, r *http.Request) string
-	MetadataURL url.URL
-	AcsURL      url.URL
-	SloURL      url.URL
+	MetadataURL       url.URL
+	AcsURL            url.URL
+	SloURL            url.URL
 }
 
 // ManagedServiceProvider returns a saml.ServiceProvider managed outside of middleware
