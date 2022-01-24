@@ -110,15 +110,17 @@ func ManagedServiceProvider(opts ManualOptions) saml.ServiceProvider {
 	}
 
 	return saml.ServiceProvider{
-		EntityID:        opts.EntityID,
-		Key:             opts.Key,
-		Certificate:     opts.Certificate,
-		Intermediates:   opts.Intermediates,
-		MetadataURL:     metadataURL,
-		AcsURL:          acsURL,
-		SloURL:          sloURL,
-		ForceAuthn:      forceAuthn,
-		SignatureMethod: signatureMethod,
+		EntityID:          opts.EntityID,
+		Key:               opts.Key,
+		Certificate:       opts.Certificate,
+		Intermediates:     opts.Intermediates,
+		MetadataURL:       metadataURL,
+		AcsURL:            acsURL,
+		SloURL:            sloURL,
+		IDPMetadata:       opts.IDPMetadata,
+		ForceAuthn:        forceAuthn,
+		SignatureMethod:   signatureMethod,
+		AllowIDPInitiated: opts.AllowIDPInitiated,
 	}
 }
 
